@@ -1,8 +1,8 @@
-function midi_mat = align_score( midi_path, wav_path, fs_w, wSize, hop )
+function midi_mat_aligned = align_score( midi_path, wav_path, wSize, hop )
 %ALIGN Summary of this function goes here
 %   Detailed explanation goes here
 
-[wav, fs_m] = audioread(wav_path);
+[wav, fs_w] = audioread(wav_path);
 
 % downmix audio
 wav = mean(wav,2);
@@ -21,16 +21,16 @@ a = find(wav_pitch_contour_in_midi ~= 0);
 wav_pitch_contour_in_midi = wav_pitch_contour_in_midi(a(1):a(end));
 
 %check if midi has pause and remove silence if no pauses
-shortest_note = min(midi_mat(:,7));
-for i = 1:numel(nmat(:,6))
-    current = nmat(i,6)+nmat(i,7);
-    diff_from_next(i) = abs(current - nmat(i+1,6));
-end
-
-diff_from_next(diff_from_next<smallest_note) = [];
-if(numel(diff_from_next) == 0)
-    wav_pitch_contour_in_midi(a)= [];
-end
+% shortest_note = min(midi_mat(:,7));
+% for i = 1:numel(midi_mat(:,6)) - 1
+%     current = midi_mat(i,6)+midi_mat(i,7);
+%     diff_from_next(i) = abs(current - midi_mat(i+1,6));
+% end
+% 
+% diff_from_next(diff_from_next<shortest_note) = [];
+% if(numel(diff_from_next) == 0)
+%     wav_pitch_contour_in_midi(a)= [];
+% end
 
 %Median filter wav_pitch_contour to remove simple octave errors
 wav_pitch_contour_in_midi = medfilt1(wav_pitch_contour_in_midi,5);
@@ -41,9 +41,9 @@ wav_pitch_contour_in_midi = medfilt1(wav_pitch_contour_in_midi,5);
 dx = diff(ix);
 pos = find(dx);
 true_pos = iy(pos);
-time_pos = true_pos*hop/fs_m;
-midi_wav = midi_mat;
-midi_wav(2:end,6) = time_pos;
-writemidi(midi_wav,'exp4.mid');
+time_pos = true_pos*hop/fs_w;
+midi_mat_aligned = midi_mat;
+midi_mat_aligned(2:end,6) = time_pos;
+writemidi(midi_mat_aligned,'exp4.mid');
 
 end
