@@ -23,6 +23,8 @@ midi_mat_new = midi_mat;
 
 % If more than 1 note have same onset (Caused by dtw alignment),
 % Spread them equally before correcting the onsets to nearest actual onsets
+% Needs to incorporate ground truth for corrent spacing of notes.
+% Equal spacing might be over-simplification
 
 k = 2;
 while(k<=N-1)
