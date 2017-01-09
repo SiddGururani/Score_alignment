@@ -12,8 +12,13 @@ function midi_mat_aligned = alignScore( midi_path, f0_wav, wav_path, wSize, hop 
 
 % downmix audio
 wav = mean(wav,2);
-midi_wav = mean(midi_wav,2);
+% midi_wav = mean(midi_wav,2);
 midi_mat = readmidi(midi_path);
+
+%normalize midi time to multiples of shortest note
+shortest_note = min(midi_mat(:,2));
+midi_mat(:,2) = midi_mat(:,2)./shortest_note;
+midi_mat(:,2) = round(midi_mat(:,2));
 
 %compensate for the pitch offset
 %process in cents rather than hertz
@@ -53,6 +58,10 @@ midi_mat_aligned(2:end,6) = time_pos;
 
 nvt = mySpectralFlux(wav, wSize, hop);
 onsets = myOnsetDetection(nvt, fs_w, wSize, hop);
-midi_mat_aligned = updateMidiOnsets(midi_mat_aligned, onsets);
+midi_mat_aligned = updateMidiOnsets(midi_mat_aligned, midi_mat, onsets, 50);
 
+%Add back starting silence to midi
+midi_mat_aligned(:,6) = midi_mat_aligned(:,6) + a(1)*hop/fs_w;
+
+writemidi(midi_mat_aligned,'exp3.mid');
 end
