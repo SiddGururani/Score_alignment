@@ -60,6 +60,10 @@ nvt = mySpectralFlux(wav, wSize, hop);
 onsets = myOnsetDetection(nvt, fs_w, wSize, hop);
 midi_mat_aligned = updateMidiOnsets(midi_mat_aligned, midi_mat, onsets, 50);
 
+%Modify durations: Currently simply using note onset difference. Need to
+%account for rests.
+midi_mat_aligned(1:end-1,7) = diff(midi_mat_aligned(:,6));
+
 %Add back starting silence to midi
 midi_mat_aligned(:,6) = midi_mat_aligned(:,6) + a(1)*hop/fs_w;
 
