@@ -47,7 +47,11 @@ wav_pitch_contour_in_midi = wav_pitch_contour_in_midi(a(1):a(end));
 wav_pitch_contour_in_midi = medfilt1(wav_pitch_contour_in_midi,5);
 
 % perform alignment
-[~, ix, iy] = dtw(midi_mat(:,4), wav_pitch_contour_in_midi);
+% [~, ix, iy] = dtw(midi_mat(:,4), wav_pitch_contour_in_midi);
+D = wrappedDist(midi_mat(:,4), wav_pitch_contour_in_midi, 12);
+[p, ~] = ToolSimpleDtw(D);
+ix = p(:,1)';
+iy = p(:,2)';
 
 dx = diff(ix);
 pos = find(dx);
@@ -67,5 +71,5 @@ midi_mat_aligned(1:end-1,7) = diff(midi_mat_aligned(:,6));
 %Add back starting silence to midi
 midi_mat_aligned(:,6) = midi_mat_aligned(:,6) + a(1)*hop/fs_w;
 
-writemidi(midi_mat_aligned,'exp3.mid');
+writemidi(midi_mat_aligned,'exp4.mid');
 end
