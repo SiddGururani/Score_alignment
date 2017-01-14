@@ -42,7 +42,6 @@ midi_mat_new = midi_mat_aligned;
 %Incorporated ground truth intervals for spacing out repeated notes
 note_repeats = diff(midi_mat_new(:,4));
 num_repeats = 0;
-i = 1;
 for i = 1:N-1
     if note_repeats(i) == 0
         num_repeats = num_repeats + 1;

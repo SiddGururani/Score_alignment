@@ -1,13 +1,13 @@
-function D = wrappedDist(vect1, vect2, N)
+function D = wrappedDist(midi, pitchcontour , N)
 
 % check if inputs are vectors or not
-vect1 = checkVect(vect1);
-vect2 = checkVect(vect2);
+midi = checkVect(midi);
+pitchcontour = checkVect(pitchcontour);
 
-D = zeros(numel(vect1), numel(vect2));
-for i = 1:numel(vect1)
-    for j = 1:numel(vect2)
-        diff = abs(vect1(i) - vect2(j));
+D = zeros(numel(midi), numel(pitchcontour));
+for i = 1:numel(midi)
+    for j = 1:numel(pitchcontour)
+        diff = abs(midi(i) - pitchcontour(j));
         D(i,j) = mod(diff, N);
     end
 end
