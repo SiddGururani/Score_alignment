@@ -107,6 +107,7 @@ end
 %Add back starting silence to midi
 midi_mat_aligned(:,6) = midi_mat_aligned(:,6) + lead_trail_z(1)*hop/fs_w;
 
+%comment if you don't want to save the midi output
 writemidi(midi_mat_aligned,'exp3.mid');
 end
 
@@ -132,7 +133,7 @@ function [midi_mat, split_note] = splitNote(midi_mat, previous_note, pos, hop, f
         midi_mat = addSilence(midi_mat, previous_note, hop, fs_w);
     else
         if(duration_note_1 <= 1e-6) %note was not played
-            midi_mat(previous_note,7) = 0;
+            midi_mat(previous_note,7) = duration_note_1;
         else %split note
             split_note = previous_note;
             note_1 = [onset_note_1, duration_note_1, midi_mat(previous_note, 3:5), onset_note_1, duration_note_1];
